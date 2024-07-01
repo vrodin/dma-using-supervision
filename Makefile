@@ -34,7 +34,7 @@ else
 endif
 
 EXELIST_supervision = \
-        menu
+        main
 
 ifneq ($(EXELIST_$(SYS)),)
 samples: $(EXELIST_$(SYS))
@@ -51,11 +51,11 @@ else
 	@echo > $(NULLDEV)
 endif
 
-menu: menu.c
-	$(CL) -t $(SYS) -O -o menu.sv -m menu.map menu.c
+main: main.c
+	$(CL) -t $(SYS) -O -o main.sv -m main.map main.c
 	
 clean:
 	@$(DEL) $(EXELIST_supervision) 2>$(NULLDEV)
 	@$(DEL) *.map 2>$(NULLDEV)
 start:
-	retroarch -L ~/.config/retroarch/cores/potator_libretro.so  menu.sv
+	retroarch -L ~/.config/retroarch/cores/potator_libretro.so  main.sv
