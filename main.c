@@ -22,21 +22,21 @@ static void init(void)
 
 void main(void)
 {
+    unsigned int bufferOffset, screenOffset, lineCount;
     init();
     while (1)
-    {
-        //top half of screen
-        *SV_BUS = 0xFF;
-        SV_DMA_BUFFER.source = (int)&bitmap;
-        SV_DMA_BUFFER.destination = (int)SV_VIDEO;
-        SV_DMA_BUFFER.lenght = 0xF0;
-        SV_DMA_BUFFER.control = 0x80;
-
-        //bottom half of screan
-        *SV_BUS = 0xFF;
-        SV_DMA_BUFFER.source = (int)&bitmap;
-        SV_DMA_BUFFER.destination = (int)SV_VIDEO + 0xF00;
-        SV_DMA_BUFFER.lenght = 0xF0;
-        SV_DMA_BUFFER.control = 0x80;
+    {   
+        bufferOffset = 0;
+        screenOffset = 0;
+        lineCount = SV_LCD.height;
+        while(lineCount--) {
+            SV_DMA_BUFFER.control = 0x0;
+            SV_DMA_BUFFER.source = (int)&bitmap + bufferOffset;
+            SV_DMA_BUFFER.destination = (int)SV_VIDEO + screenOffset;
+            SV_DMA_BUFFER.lenght = 0x3;
+            SV_DMA_BUFFER.control = 0x80;
+            bufferOffset += 0x28;
+            screenOffset += 0x30;
+        }
     }
 }
